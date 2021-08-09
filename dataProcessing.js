@@ -12,12 +12,14 @@ export const getDomainByDate = (data) => {
 	return [Math.min(...dates), Math.max(...dates)];
 };
 
-export const processData = ({ data, width, height, maxPrice, maxDate }) => {
+export const processData = ({ data, width, height }) => {
+	const [minDate, maxDate] = getDomainByDate(data);
+	const [minPrice, maxPrice] = getDomainByPrice(data);
 	return data
 		.map(({ data }, index) => {
-			const x = (index / 63) * width;
-			const y = (data[5] / maxPrice) * height;
-			return { x, y };
+			const x = (index / 500) * width;
+			const y = (data[5] / maxPrice) * height * 0.5;
+			return { x, y, price: data[5], exchange: data[4] };
 		})
-		.filter(({ x, y }) => x !== 0 && y !== 0);
+		.filter(({ y }) => !!y);
 };
