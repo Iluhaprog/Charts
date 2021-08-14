@@ -1,6 +1,6 @@
 "use strict";
 
-import { createWebsocket } from "./ws.js";
+import { testData } from "./testdata.js";
 
 const SIZES = { width: 700, height: 300 };
 const BACKGROUND = (alpha = 1) => `rgba(21, 12, 26, ${alpha})`;
@@ -8,35 +8,15 @@ const LINE_COLOR = (alpha = 1) => `rgba(204, 120, 250, ${alpha})`;
 const SHADOW_COLOR = (alpha = 1) => `rgba(214, 140, 255, ${alpha})`;
 const PADDING = 30;
 
-export const init = () => {
+export const init = (data) => {
 	const mainBox = document.body;
 	const { canvas, context } = createCanvas({
 		...SIZES,
 		background: BACKGROUND(),
 	});
 	mainBox.appendChild(canvas);
-	createWebsocket(
-		(data) => {
-			draw(context, data);
-			drawShadow(context, data);
-			drawText({
-				context,
-				x: 20,
-				y: 35,
-				fs: 24,
-				text: `${data[data.length - 1].price.toFixed(2)} $`,
-			});
-			drawText({
-				context,
-				x: SIZES.width - 110,
-				y: 35,
-				fs: 16,
-				text: "BTC/USD",
-			});
-		},
-		SIZES.width,
-		SIZES.height
-	);
+	draw(context, data);
+	drawShadow(context, data);
 };
 
 export const createCanvas = ({ width, height, background }) => {
@@ -125,4 +105,4 @@ export const drawLine = ({
 	context.closePath();
 };
 
-init();
+init(testData);
